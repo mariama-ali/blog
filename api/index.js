@@ -24,7 +24,8 @@ db.on('error',()=>console.log("Error in Connecting to Database"));
 db.once('open',()=>console.log("Connected to Database"))
 
 //routes
-app.use("/", require("./routes/auth"));
+app.use("/auth", require("./routes/auth"));
+app.use("/", require("./routes/posts"));
 app.use('*', cors());
 
 //port
