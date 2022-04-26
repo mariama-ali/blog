@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const multer = require("multer");
+const path = require("path");
+
+app.use("/images", express.static(path.join(__dirname, "/images")));
 
 //body-parser
 app.use(bodyParser.json())
@@ -25,8 +29,25 @@ db.once('open',()=>console.log("Connected to Database"))
 
 //routes
 app.use("/auth", require("./routes/auth"));
-app.use("/", require("./routes/posts"));
+app.use("/posts", require("./routes/posts"));
+app.use("/categories", require("./routes/categories"));
+app.use("/users", require("./routes/users"));
 app.use('*', cors());
+
+//multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "images");
+    },
+    filename: (req, file, cb) => {
+      cb(null, req.body.name);
+    },
+  });
+
+const upload = multer({ storage: storage });
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  res.status(200).json("File has been uploaded");
+});
 
 //port
 const port = process.env.PORT || 4000

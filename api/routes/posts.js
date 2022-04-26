@@ -48,18 +48,19 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+//Create REST API to delete posts by id 
 router.delete("/:id", async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id);
-      if (post.username === req.body.username) {
-          await post.delete();
-          return res.status(200).json("Post has been deleted...");
-      } else {
-        return res.status(401).json("You can delete only your post!");
-      }
+        const post = await Post.findById(req.params.id);
+        if (post.username === req.body.username) {
+            await post.delete();
+            return res.status(200).json("Post has been deleted...");
+        } else {
+            return res.status(401).json("You can delete only your post!");
+        }
     } catch (err) {
         return res.status(500).json(err);
     }
-  });
+});
 
 module.exports = router;
