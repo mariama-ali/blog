@@ -1,32 +1,40 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom"
 import post3 from "../../assets/img/post3.jpg"
 import './Singlepost.css'
+import { Link } from "react-router-dom"
+
 export default function SinglePost() {
+    const location = useLocation();
+    const path = location.pathname.split("/")[2];
+    const [post, setPost] = useState({});
+
+    useEffect(()=> {
+        const getPost = async () => {
+            const res = await axios.get("/posts/" + path);
+            setPost(res.data)
+        };
+        getPost()
+    }, [path])
+
   return (
     <div className='singlepost'>
         <div className="singlePostWrapper">
             <img src={post3} alt="" className="singlePostImg" />
             <h1 className="singlePostTitle">
-                Lorem ipsum dolor sit amet.
+               {post.title}
                 <div className="singlePostEdit">
                     <i className="singlePostIcon far fa-edit"></i>
                     <i className="singlePostIcon far fa-trash-alt"></i>
                 </div>
             </h1>
             <div className="singlePostInfo">
-                <span className="singlePostAuthor">Author: <b>Mariama</b></span>
-                <span className="singlePostDate">1 hour ago</span>
+                <span className="singlePostAuthor">Author:
+                 <Link className="link" to={`/?user=${post.username}`}><b>{post.username}</b></Link></span>
+                <span className="singlePostDate">{new Date(post.createdAt).toDateString()}</span>
             </div>
-            <p className="singlePostDesc">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                    Eius dolorem voluptatibus officiis illo accusamus praesentium assumenda recusandae? Q
-                    uam esse praesentium repellendus numquam ab autem debitis quia exercitationem nisi, iure dolorum! 
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat voluptatem debitis, consequatur, 
-                    dignissimos eius earum quos officiis sequi, culpa assumenda praesentium ad corrupti 
-                    dolorum nesciunt aliquid modi nulla labore! Qui. 
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam rerum deserunt, 
-                    velit est maiores enim amet saepe? Ipsum recusandae corrupti sunt dicta, voluptates ullam quisquam doloremque 
-                    fugit neque, quae nemo.
-            </p>
+            <p className="singlePostDesc">{post.desc}</p>
         </div>
     </div>
   )

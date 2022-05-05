@@ -32,6 +32,10 @@
     border-radius: 10px;
     padding: 10px;
 }
+.loginButton:disabled{
+    cursor: not-allowed;
+    background-color: rgb(255, 166,166);
+}
 .loginResgisterButton{
     position: absolute;
     top: 60px;
